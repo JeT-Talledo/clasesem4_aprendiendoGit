@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 
-public class FrmManteProd extends JFrame {
+public class FrmManteProd extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 
@@ -38,6 +38,8 @@ public class FrmManteProd extends JFrame {
 	private JTextField txtDescripcion;
 	private JTextField txtStock;
 	private JTextField txtPrecio;
+	private JButton btnBuscar;
+	private JButton btnActualizar;
 
 	/**
 	 * Launch the application.
@@ -61,7 +63,7 @@ public class FrmManteProd extends JFrame {
 	public FrmManteProd() {
 		setTitle("Mantenimiento de Productos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 390);
+		setBounds(100, 100, 512, 458);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -73,11 +75,11 @@ public class FrmManteProd extends JFrame {
 				registrar();
 			}
 		});
-		btnNewButton.setBounds(324, 29, 89, 23);
+		btnNewButton.setBounds(324, 29, 102, 23);
 		contentPane.add(btnNewButton);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 171, 414, 143);
+		scrollPane.setBounds(10, 213, 478, 163);
 		contentPane.add(scrollPane);
 
 		txtSalida = new JTextArea();
@@ -89,7 +91,7 @@ public class FrmManteProd extends JFrame {
 				listado();
 			}
 		});
-		btnListado.setBounds(177, 322, 89, 23);
+		btnListado.setBounds(220, 386, 89, 23);
 		contentPane.add(btnListado);
 
 		txtCódigo = new JTextField();
@@ -137,12 +139,23 @@ public class FrmManteProd extends JFrame {
 		contentPane.add(txtPrecio);
 
 		JLabel lblProveedor = new JLabel("Proveedor:");
-		lblProveedor.setBounds(220, 106, 102, 14);
+		lblProveedor.setBounds(10, 170, 102, 14);
 		contentPane.add(lblProveedor);
 
 		cboProveedores = new JComboBox();
-		cboProveedores.setBounds(310, 106, 86, 22);
+		cboProveedores.setBounds(132, 166, 86, 22);
 		contentPane.add(cboProveedores);
+		
+		btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(this);
+		btnBuscar.setBounds(324, 62, 102, 21);
+		contentPane.add(btnBuscar);
+		
+		btnActualizar = new JButton("Actualizar");
+		btnActualizar.addActionListener(this);
+		btnActualizar.setBounds(324, 93, 102, 21);
+		contentPane.add(btnActualizar);
+		
 
 		llenaCombo();
 	}
@@ -225,5 +238,31 @@ public class FrmManteProd extends JFrame {
 		em.close();
 		
 		JOptionPane.showMessageDialog(this, "Producto registrado");
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnActualizar) {
+			handle_btnActualizar_actionPerformed(e);
+		}
+		if (e.getSource() == btnBuscar) {
+			handle_btnBuscar_actionPerformed(e);
+		}
+	}
+	protected void handle_btnBuscar_actionPerformed(ActionEvent e) {
+		
+		EntityManagerFactory fabrica = Persistence.createEntityManagerFactory("mysql");
+		EntityManager em = fabrica.createEntityManager();
+
+		Producto p = em.find(Producto.class, txtCódigo.getText());
+		
+		if (p == null) {
+			txtSalida.setText("codigo no existe");
+		}else {
+			txtDescripcion.setText(p.getDes_prod());
+		}
+
+		em.close();
+	}
+	protected void handle_btnActualizar_actionPerformed(ActionEvent e) {
+		
 	}
 }

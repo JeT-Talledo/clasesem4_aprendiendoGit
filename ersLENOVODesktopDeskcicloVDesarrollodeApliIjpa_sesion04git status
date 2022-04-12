@@ -1,0 +1,62 @@
+[1mdiff --git a/src/main/java/app/FrmManteProd.java b/src/main/java/app/FrmManteProd.java[m
+[1mindex 7fa523f..38020fa 100644[m
+[1m--- a/src/main/java/app/FrmManteProd.java[m
+[1m+++ b/src/main/java/app/FrmManteProd.java[m
+[36m@@ -27,7 +27,7 @@[m [mimport javax.swing.JLabel;[m
+ import javax.swing.JOptionPane;[m
+ import javax.swing.JComboBox;[m
+ [m
+[31m-public class FrmManteProd extends JFrame {[m
+[32m+[m[32mpublic class FrmManteProd extends JFrame implements ActionListener {[m
+ [m
+ 	private JPanel contentPane;[m
+ [m
+[36m@@ -38,6 +38,7 @@[m [mpublic class FrmManteProd extends JFrame {[m
+ 	private JTextField txtDescripcion;[m
+ 	private JTextField txtStock;[m
+ 	private JTextField txtPrecio;[m
+[32m+[m	[32mprivate JButton btnBuscar;[m
+ [m
+ 	/**[m
+ 	 * Launch the application.[m
+[36m@@ -141,8 +142,14 @@[m [mpublic class FrmManteProd extends JFrame {[m
+ 		contentPane.add(lblProveedor);[m
+ [m
+ 		cboProveedores = new JComboBox();[m
+[31m-		cboProveedores.setBounds(310, 106, 86, 22);[m
+[32m+[m		[32mcboProveedores.setBounds(327, 102, 86, 22);[m
+ 		contentPane.add(cboProveedores);[m
+[32m+[m[41m		[m
+[32m+[m		[32mbtnBuscar = new JButton("Buscar");[m
+[32m+[m		[32mbtnBuscar.addActionListener(this);[m
+[32m+[m		[32mbtnBuscar.setBounds(324, 62, 81, 21);[m
+[32m+[m		[32mcontentPane.add(btnBuscar);[m
+[32m+[m[41m		[m
+ [m
+ 		llenaCombo();[m
+ 	}[m
+[36m@@ -226,4 +233,24 @@[m [mpublic class FrmManteProd extends JFrame {[m
+ 		[m
+ 		JOptionPane.showMessageDialog(this, "Producto registrado");[m
+ 	}[m
+[32m+[m	[32mpublic void actionPerformed(ActionEvent e) {[m
+[32m+[m		[32mif (e.getSource() == btnBuscar) {[m
+[32m+[m			[32mhandle_btnBuscar_actionPerformed(e);[m
+[32m+[m		[32m}[m
+[32m+[m	[32m}[m
+[32m+[m	[32mprotected void handle_btnBuscar_actionPerformed(ActionEvent e) {[m
+[32m+[m[41m		[m
+[32m+[m		[32mEntityManagerFactory fabrica = Persistence.createEntityManagerFactory("mysql");[m
+[32m+[m		[32mEntityManager em = fabrica.createEntityManager();[m
+[32m+[m
+[32m+[m		[32mProducto p = em.find(Producto.class, txtCódigo.getText());[m
+[32m+[m[41m		[m
+[32m+[m		[32mif (p == null) {[m
+[32m+[m			[32mtxtSalida.setText("codigo no existe");[m
+[32m+[m		[32m}else {[m
+[32m+[m			[32mtxtDescripcion.setText(getName());[m
+[32m+[m		[32m}[m
+[32m+[m
+[32m+[m		[32mem.close();[m
+[32m+[m	[32m}[m
+ }[m
